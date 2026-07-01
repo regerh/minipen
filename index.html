@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO 최적화: 타이틀 변경 (핵심 키워드 포함) -->
-    <title>MiniPen: Real-time HTML, CSS, JS Editor - Online Code Playground</title>
+    <title>MiniPen: 실시간 HTML, CSS, JS 에디터 - 온라인 코드 편집기</title>
     <!-- SEO 최적화: 메타 디스크립션 추가 (검색 결과에 노출) -->
-    <meta name="description" content="MiniPen is a free online code editor where you can write and preview HTML, CSS, and JavaScript in real-time right in your browser. Perfect for frontend development practice, testing code snippets, and learning web design.">
+    <meta name="description" content="MiniPen은 브라우저에서 즉시 HTML, CSS, JavaScript 코드를 작성하고 실행 결과를 미리 볼 수 있는 무료 온라인 코드 에디터입니다. 프론트엔드 개발 연습, 코드 스니펫 테스트, 웹 페이지 학습에 최적화된 라이브 편집 환경을 제공합니다.">
 
     <!-- hreflang 태그: 검색 엔진에 다른 언어 버전이 있음을 알림 -->
-    <link rel="alternate" href="https://[YOUR_VERCEL_DOMAIN]/index.html" hreflang="ko" />
     <link rel="alternate" href="https://[YOUR_VERCEL_DOMAIN]/en.html" hreflang="en" />
+    <link rel="alternate" href="https://[YOUR_VERCEL_DOMAIN]/index.html" hreflang="ko" />
     <!-- x-default: 언어 설정이 없는 사용자에게 보여줄 기본 페이지 (여기서는 한국어 페이지) -->
     <link rel="alternate" href="https://[YOUR_VERCEL_DOMAIN]/index.html" hreflang="x-default" />
 
@@ -43,7 +43,7 @@
             flex-direction: column;
         }
 
-        /* Header */
+        /* 헤더 */
         .header {
             background: #323233;
             padding: 8px 16px;
@@ -53,7 +53,7 @@
             border-bottom: 1px solid var(--border);
             flex-shrink: 0;
         }
-        /* SEO Optimization: Changed logo to <h1> tag while retaining existing style */
+        /* SEO 최적화: 로고를 <h1> 태그로 변경하고 기존 스타일 유지 */
         .header .logo {
             font-weight: 700;
             font-size: 16px;
@@ -92,9 +92,9 @@
             font-size: 13px;
             cursor: pointer;
         }
-        /* Language switcher style */
+        /* 언어 선택 버튼 스타일 */
         .lang-switcher {
-            margin-left: auto; /* Aligns to the right */
+            margin-left: auto; /* 오른쪽으로 정렬 */
             display: flex;
             gap: 8px;
         }
@@ -115,14 +115,14 @@
             font-weight: 600;
         }
 
-        /* Main Area */
+        /* 메인 영역 */
         .main {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* Editor Panel */
+        /* 에디터 패널 */
         .editor-panel {
             flex: 1;
             display: flex;
@@ -131,7 +131,7 @@
             border-right: 1px solid var(--border);
         }
 
-        /* Tabs */
+        /* 탭 */
         .tabs {
             display: flex;
             background: #252526;
@@ -156,7 +156,7 @@
             background: #2a2a2a;
         }
 
-        /* Code Editor */
+        /* 코드 에디터 */
         .code-area {
             flex: 1;
             position: relative;
@@ -184,7 +184,7 @@
             display: block;
         }
 
-        /* Preview Panel */
+        /* 프리뷰 패널 */
         .preview-panel {
             flex: 1;
             display: flex;
@@ -222,7 +222,7 @@
             width: 100%;
         }
 
-        /* Error Console */
+        /* 에러 콘솔 */
         .console {
             height: 100px;
             background: #1a1a1a;
@@ -247,7 +247,7 @@
             color: #6a9955;
         }
 
-        /* Responsive */
+        /* 반응형 */
         @media (max-width: 768px) {
             .main {
                 flex-direction: column;
@@ -271,28 +271,28 @@
 <body>
 
     <div class="header">
-        <!-- SEO Optimization: Changed logo to <h1> tag -->
+        <!-- SEO 최적화: 로고를 <h1> 태그로 변경 -->
         <h1 class="logo">🎨 Mini<span>Pen</span></h1>
-        <button id="btnRun">▶ Run (Ctrl+Enter)</button>
-        <button id="btnAuto" class="auto">⚡ Auto-Refresh OFF</button>
+        <button id="btnRun">▶ 실행 (Ctrl+Enter)</button>
+        <button id="btnAuto" class="auto">⚡ 자동반영 OFF</button>
         <select id="layoutSelect">
-            <option value="split">Split View</option>
-            <option value="rows">Rows View</option>
-            <option value="preview-only">Preview Only</option>
-            <option value="editor-only">Editor Only</option>
+            <option value="split">좌우 분할</option>
+            <option value="rows">상하 분할</option>
+            <option value="preview-only">프리뷰만</option>
+            <option value="editor-only">에디터만</option>
         </select>
-        <button id="btnExport" style="background:#555;">📥 Download HTML</button>
-        <button id="btnConsole" style="background:#555;">🖥 Console</button>
+        <button id="btnExport" style="background:#555;">📥 HTML 다운로드</button>
+        <button id="btnConsole" style="background:#555;">🖥 콘솔</button>
 
-        <!-- Language switcher UI added -->
+        <!-- 언어 선택 UI 추가 -->
         <div class="lang-switcher">
-            <a href="/index.html">한국어</a>
-            <a href="/en.html" class="active">English</a>
+            <a href="/index.html" class="active">한국어</a>
+            <a href="/en.html">English</a>
         </div>
     </div>
 
     <div class="main" id="mainContainer">
-        <!-- Editor -->
+        <!-- 에디터 -->
         <div class="editor-panel" id="editorPanel">
             <div class="tabs">
                 <div class="tab active" data-tab="html">HTML</div>
@@ -300,11 +300,11 @@
                 <div class="tab" data-tab="js">JavaScript</div>
             </div>
             <div class="code-area">
-                <textarea id="htmlCode" class="visible" placeholder="<!-- Enter your HTML code here -->" spellcheck="false"><!-- HTML -->
-<h1>Hello there! 👋</h1>
-<p>Write your HTML here and run with <strong>Ctrl+Enter</strong>.</p>
-<button onclick="alert('Button clicked!')">Test Button</button></textarea>
-                <textarea id="cssCode" placeholder="/* Enter your CSS code here */" spellcheck="false">/* CSS */
+                <textarea id="htmlCode" class="visible" placeholder="<!-- HTML 코드를 입력하세요 -->" spellcheck="false"><!-- HTML -->
+<h1>안녕하세요! 👋</h1>
+<p>여기에 HTML을 작성하고 <strong>Ctrl+Enter</strong>로 실행하세요</p>
+<button onclick="alert('버튼 클릭!')">테스트 버튼</button></textarea>
+                <textarea id="cssCode" placeholder="/* CSS 코드를 입력하세요 */" spellcheck="false">/* CSS */
 body {
 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 color: white;
@@ -324,18 +324,18 @@ cursor: pointer;
 margin-top: 10px;
 }
 button:hover { background: #eee; }</textarea>
-                <textarea id="jsCode" placeholder="// Enter your JavaScript code here" spellcheck="false">// JavaScript
-console.log('MiniPen execution complete! 🚀');
-console.log('Click the Console button to see logs.');</textarea>
+                <textarea id="jsCode" placeholder="// JavaScript 코드를 입력하세요" spellcheck="false">// JavaScript
+console.log('MiniPen 실행 완료! 🚀');
+console.log('콘솔 버튼을 눌러 로그를 확인하세요');</textarea>
             </div>
         </div>
 
-        <!-- Resize Handle -->
+        <!-- 크기 조절 핸들 -->
         <div class="resize-handle" id="resizeHandle"></div>
 
-        <!-- Preview -->
+        <!-- 프리뷰 -->
         <div class="preview-panel" id="previewPanel">
-            <div class="preview-header">👁 Preview</div>
+            <div class="preview-header">👁 프리뷰</div>
             <iframe id="previewFrame" sandbox="allow-scripts allow-modals allow-popups allow-same-origin"></iframe>
         </div>
     </div>
@@ -343,7 +343,7 @@ console.log('Click the Console button to see logs.');</textarea>
     <div class="console" id="consoleOutput"></div>
 
     <script>
-        // DOM Elements
+        // DOM 요소
         const htmlCode = document.getElementById('htmlCode');
         const cssCode = document.getElementById('cssCode');
         const jsCode = document.getElementById('jsCode');
@@ -361,13 +361,13 @@ console.log('Click the Console button to see logs.');</textarea>
         const tabs = document.querySelectorAll('.tab');
         const textareas = document.querySelectorAll('textarea');
 
-        // State
+        // 상태
         let autoRefresh = false;
         let autoTimer = null;
         let consoleVisible = false;
         let capturedLogs = [];
 
-        // ============ Tab Switching ============
+        // ============ 탭 전환 ============
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 tabs.forEach(t => t.classList.remove('active'));
@@ -380,7 +380,7 @@ console.log('Click the Console button to see logs.');</textarea>
             });
         });
 
-        // ============ Console Capture Script ============
+        // ============ 콘솔 캡처용 스크립트 ============
         function getCaptureScript() {
             return `
 <script>
@@ -406,14 +406,14 @@ console.log('Click the Console button to see logs.');</textarea>
 <\/script>`;
         }
 
-        // ============ Update Preview ============
+        // ============ 프리뷰 업데이트 ============
         function updatePreview() {
             const html = htmlCode.value;
             const css = cssCode.value;
             const js = jsCode.value;
 
             const fullHTML = `<!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -427,7 +427,7 @@ ${html}
 try {
 ${js}
 } catch(e) {
-console.error('❌ JavaScript Error: ' + e.message);
+console.error('❌ JavaScript 오류: ' + e.message);
 }
 })();
 <\/script>
@@ -445,7 +445,7 @@ console.error('❌ JavaScript Error: ' + e.message);
                         if (consoleVisible) renderConsole();
                     }
                 } catch (e) {
-                    // cross-origin ignored
+                    // cross-origin 무시
                 }
                 URL.revokeObjectURL(url);
             };
@@ -453,7 +453,7 @@ console.error('❌ JavaScript Error: ' + e.message);
             previewFrame.src = url;
         }
 
-        // ============ Render Console ============
+        // ============ 콘솔 렌더링 ============
         function renderConsole() {
             consoleOutput.innerHTML = '';
             capturedLogs.forEach(log => {
@@ -465,19 +465,19 @@ console.error('❌ JavaScript Error: ' + e.message);
             consoleOutput.scrollTop = consoleOutput.scrollHeight;
         }
 
-        // ============ Button Events ============
+        // ============ 버튼 이벤트 ============
         btnRun.addEventListener('click', updatePreview);
 
         btnAuto.addEventListener('click', () => {
             autoRefresh = !autoRefresh;
             if (autoRefresh) {
-                btnAuto.textContent = '⚡ Auto-Refresh ON';
+                btnAuto.textContent = '⚡ 자동반영 ON';
                 btnAuto.classList.add('active');
                 autoTimer = setInterval(() => {
                     updatePreview();
                 }, 500);
             } else {
-                btnAuto.textContent = '⚡ Auto-Refresh OFF';
+                btnAuto.textContent = '⚡ 자동반영 OFF';
                 btnAuto.classList.remove('active');
                 clearInterval(autoTimer);
             }
@@ -488,7 +488,7 @@ console.error('❌ JavaScript Error: ' + e.message);
             const css = cssCode.value;
             const js = jsCode.value;
             const fullHTML = `<!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -521,7 +521,7 @@ ${html}
             }
         });
 
-        // ============ Layout Switching ============
+        // ============ 레이아웃 전환 ============
         layoutSelect.addEventListener('change', () => {
             const val = layoutSelect.value;
             if (val === 'split') {
@@ -551,7 +551,7 @@ ${html}
             }
         });
 
-        // ============ Resize Handle ============
+        // ============ 크기 조절 핸들 ============
         let isResizing = false;
         resizeHandle.addEventListener('mousedown', (e) => {
             isResizing = true;
@@ -587,7 +587,7 @@ ${html}
             }
         });
 
-        // ============ Keyboard Shortcuts ============
+        // ============ 키보드 단축키 ============
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'Enter') {
                 e.preventDefault();
@@ -599,11 +599,11 @@ ${html}
             }
         });
 
-        // ============ Initial Run ============
+        // ============ 초기 실행 ============
         updatePreview();
 
-        console.log('✅ MiniPen is ready!');
-        console.log('💡 Shortcuts: Ctrl+Enter = Run, Ctrl+S = Download');
+        console.log('✅ MiniPen 준비 완료!');
+        console.log('💡 단축키: Ctrl+Enter = 실행, Ctrl+S = 다운로드');
     </script>
 
 </body>
