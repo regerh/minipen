@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO 최적화: 타이틀 변경 (핵심 키워드 포함) -->
+    <title>MiniPen: Real-time HTML, CSS, JS Editor - Online Code Playground</title>
+    <!-- SEO 최적화: 메타 디스크립션 추가 (검색 결과에 노출) -->
+    <meta name="description" content="MiniPen is a free online code editor where you can write and preview HTML, CSS, and JavaScript in real-time right in your browser. Perfect for frontend development practice, testing code snippets, and learning web design.">
+
+    <!-- hreflang 태그: 검색 엔진에 다른 언어 버전이 있음을 알림 -->
+    <link rel="alternate" href="https://[YOUR_VERCEL_DOMAIN]/index.html" hreflang="ko" />
+    <link rel="alternate" href="https://[YOUR_VERCEL_DOMAIN]/en.html" hreflang="en" />
+    <!-- x-default: 언어 설정이 없는 사용자에게 보여줄 기본 페이지 (여기서는 한국어 페이지) -->
+    <link rel="alternate" href="https://[YOUR_VERCEL_DOMAIN]/index.html" hreflang="x-default" />
+
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --panel-bg: #252526;
+            --text: #d4d4d4;
+            --accent: #007acc;
+            --border: #3e3e3e;
+            --tab-active: #1e1e1e;
+            --tab-inactive: #2d2d2d;
+            --lang-active-bg: #007acc; /* 언어 선택 버튼 활성화 색상 */
+            --lang-inactive-bg: #3c3c3c; /* 언어 선택 버튼 비활성화 색상 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: #323233;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        /* SEO Optimization: Changed logo to <h1> tag while retaining existing style */
+        .header .logo {
+            font-weight: 700;
+            font-size: 16px;
+            color: #fff;
+            margin: 0;
+        }
+        .header .logo span {
+            color: var(--accent);
+        }
+        .header button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.15s;
+        }
+        .header button:hover {
+            background: #1c8ad4;
+        }
+        .header button.auto {
+            background: #4caf50;
+        }
+        .header button.auto.active {
+            background: #ff9800;
+        }
+        .header select {
+            background: #3c3c3c;
+            color: #d4d4d4;
+            border: 1px solid var(--border);
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        /* Language switcher style */
+        .lang-switcher {
+            margin-left: auto; /* Aligns to the right */
+            display: flex;
+            gap: 8px;
+        }
+        .lang-switcher a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            background: var(--lang-inactive-bg);
+            font-size: 13px;
+            transition: background 0.15s;
+        }
+        .lang-switcher a:hover {
+            background: #555;
+        }
+        .lang-switcher a.active {
+            background: var(--lang-active-bg);
+            font-weight: 600;
+        }
+
+        /* Main Area */
+        .main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Editor Panel */
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            border-right: 1px solid var(--border);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: #252526;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            border-right: 1px solid var(--border);
+            background: var(--tab-inactive);
+            transition: background 0.1s;
+            user-select: none;
+        }
+        .tab.active {
+            background: var(--tab-active);
+            border-bottom: 2px solid var(--accent);
+            margin-bottom: -1px;
+        }
+        .tab:hover {
+            background: #2a2a2a;
+        }
+
+        /* Code Editor */
+        .code-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        textarea {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            resize: none;
+            padding: 12px;
+            font-family: 'Consolas', 'Courier New', 'D2Coding', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            tab-size: 2;
+            outline: none;
+            display: none;
+        }
+        textarea.visible {
+            display: block;
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .preview-header {
+            background: #252526;
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #999;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .resize-handle {
+            width: 4px;
+            cursor: col-resize;
+            background: transparent;
+            flex-shrink: 0;
+            transition: background 0.2s;
+            position: relative;
+            z-index: 10;
+        }
+        .resize-handle:hover,
+        .resize-handle.active {
+            background: var(--accent);
+        }
+        iframe {
+            flex: 1;
+            border: none;
+            background: #fff;
+            width: 100%;
+        }
+
+        /* Error Console */
+        .console {
+            height: 100px;
+            background: #1a1a1a;
+            border-top: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 8px 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            flex-shrink: 0;
+            display: none;
+        }
+        .console.visible {
+            display: block;
+        }
+        .console .error {
+            color: #f44747;
+        }
+        .console .warn {
+            color: #cca700;
+        }
+        .console .info {
+            color: #6a9955;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+            }
+            .editor-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                flex: 0 0 45%;
+            }
+            .preview-panel {
+                flex: 1;
+            }
+            .resize-handle {
+                width: 100%;
+                height: 4px;
+                cursor: row-resize;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <!-- SEO Optimization: Changed logo to <h1> tag -->
+        <h1 class="logo">🎨 Mini<span>Pen</span></h1>
+        <button id="btnRun">▶ Run (Ctrl+Enter)</button>
+        <button id="btnAuto" class="auto">⚡ Auto-Refresh OFF</button>
+        <select id="layoutSelect">
+            <option value="split">Split View</option>
+            <option value="rows">Rows View</option>
+            <option value="preview-only">Preview Only</option>
+            <option value="editor-only">Editor Only</option>
+        </select>
+        <button id="btnExport" style="background:#555;">📥 Download HTML</button>
+        <button id="btnConsole" style="background:#555;">🖥 Console</button>
+
+        <!-- Language switcher UI added -->
+        <div class="lang-switcher">
+            <a href="/index.html">한국어</a>
+            <a href="/en.html" class="active">English</a>
+        </div>
+    </div>
+
+    <div class="main" id="mainContainer">
+        <!-- Editor -->
+        <div class="editor-panel" id="editorPanel">
+            <div class="tabs">
+                <div class="tab active" data-tab="html">HTML</div>
+                <div class="tab" data-tab="css">CSS</div>
+                <div class="tab" data-tab="js">JavaScript</div>
+            </div>
+            <div class="code-area">
+                <textarea id="htmlCode" class="visible" placeholder="<!-- Enter your HTML code here -->" spellcheck="false"><!-- HTML -->
+<h1>Hello there! 👋</h1>
+<p>Write your HTML here and run with <strong>Ctrl+Enter</strong>.</p>
+<button onclick="alert('Button clicked!')">Test Button</button></textarea>
+                <textarea id="cssCode" placeholder="/* Enter your CSS code here */" spellcheck="false">/* CSS */
+body {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+font-family: 'Segoe UI', sans-serif;
+text-align: center;
+padding: 40px;
+}
+h1 { font-size: 2em; margin-bottom: 10px; }
+button {
+padding: 10px 24px;
+font-size: 1em;
+border: none;
+border-radius: 8px;
+background: white;
+color: #333;
+cursor: pointer;
+margin-top: 10px;
+}
+button:hover { background: #eee; }</textarea>
+                <textarea id="jsCode" placeholder="// Enter your JavaScript code here" spellcheck="false">// JavaScript
+console.log('MiniPen execution complete! 🚀');
+console.log('Click the Console button to see logs.');</textarea>
+            </div>
+        </div>
+
+        <!-- Resize Handle -->
+        <div class="resize-handle" id="resizeHandle"></div>
+
+        <!-- Preview -->
+        <div class="preview-panel" id="previewPanel">
+            <div class="preview-header">👁 Preview</div>
+            <iframe id="previewFrame" sandbox="allow-scripts allow-modals allow-popups allow-same-origin"></iframe>
+        </div>
+    </div>
+
+    <div class="console" id="consoleOutput"></div>
+
+    <script>
+        // DOM Elements
+        const htmlCode = document.getElementById('htmlCode');
+        const cssCode = document.getElementById('cssCode');
+        const jsCode = document.getElementById('jsCode');
+        const previewFrame = document.getElementById('previewFrame');
+        const btnRun = document.getElementById('btnRun');
+        const btnAuto = document.getElementById('btnAuto');
+        const btnExport = document.getElementById('btnExport');
+        const btnConsole = document.getElementById('btnConsole');
+        const consoleOutput = document.getElementById('consoleOutput');
+        const layoutSelect = document.getElementById('layoutSelect');
+        const mainContainer = document.getElementById('mainContainer');
+        const editorPanel = document.getElementById('editorPanel');
+        const previewPanel = document.getElementById('previewPanel');
+        const resizeHandle = document.getElementById('resizeHandle');
+        const tabs = document.querySelectorAll('.tab');
+        const textareas = document.querySelectorAll('textarea');
+
+        // State
+        let autoRefresh = false;
+        let autoTimer = null;
+        let consoleVisible = false;
+        let capturedLogs = [];
+
+        // ============ Tab Switching ============
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.dataset.tab;
+                textareas.forEach(ta => ta.classList.remove('visible'));
+                if (target === 'html') htmlCode.classList.add('visible');
+                if (target === 'css') cssCode.classList.add('visible');
+                if (target === 'js') jsCode.classList.add('visible');
+            });
+        });
+
+        // ============ Console Capture Script ============
+        function getCaptureScript() {
+            return `
+<script>
+(function() {
+    var _log = console.log;
+    var _warn = console.warn;
+    var _error = console.error;
+    var logs = [];
+    console.log = function() {
+        logs.push({type:'log', msg: Array.from(arguments).map(String).join(' ')});
+        _log.apply(console, arguments);
+    };
+    console.warn = function() {
+        logs.push({type:'warn', msg: Array.from(arguments).map(String).join(' ')});
+        _warn.apply(console, arguments);
+    };
+    console.error = function() {
+        logs.push({type:'error', msg: Array.from(arguments).map(String).join(' ')});
+        _error.apply(console, arguments);
+    };
+    window.__capturedLogs = logs;
+})();
+<\/script>`;
+        }
+
+        // ============ Update Preview ============
+        function updatePreview() {
+            const html = htmlCode.value;
+            const css = cssCode.value;
+            const js = jsCode.value;
+
+            const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>${css}</style>
+${getCaptureScript()}
+</head>
+<body>
+${html}
+<script>
+(function() {
+try {
+${js}
+} catch(e) {
+console.error('❌ JavaScript Error: ' + e.message);
+}
+})();
+<\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([fullHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            previewFrame.onload = () => {
+                try {
+                    const captured = previewFrame.contentWindow.__capturedLogs;
+                    if (captured) {
+                        capturedLogs = captured;
+                        if (consoleVisible) renderConsole();
+                    }
+                } catch (e) {
+                    // cross-origin ignored
+                }
+                URL.revokeObjectURL(url);
+            };
+
+            previewFrame.src = url;
+        }
+
+        // ============ Render Console ============
+        function renderConsole() {
+            consoleOutput.innerHTML = '';
+            capturedLogs.forEach(log => {
+                const div = document.createElement('div');
+                div.className = log.type === 'error' ? 'error' : log.type === 'warn' ? 'warn' : 'info';
+                div.textContent = `[${log.type.toUpperCase()}] ${log.msg}`;
+                consoleOutput.appendChild(div);
+            });
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // ============ Button Events ============
+        btnRun.addEventListener('click', updatePreview);
+
+        btnAuto.addEventListener('click', () => {
+            autoRefresh = !autoRefresh;
+            if (autoRefresh) {
+                btnAuto.textContent = '⚡ Auto-Refresh ON';
+                btnAuto.classList.add('active');
+                autoTimer = setInterval(() => {
+                    updatePreview();
+                }, 500);
+            } else {
+                btnAuto.textContent = '⚡ Auto-Refresh OFF';
+                btnAuto.classList.remove('active');
+                clearInterval(autoTimer);
+            }
+        });
+
+        btnExport.addEventListener('click', () => {
+            const html = htmlCode.value;
+            const css = cssCode.value;
+            const js = jsCode.value;
+            const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniPen Export</title>
+<style>${css}</style>
+</head>
+<body>
+${html}
+<script>${js}<\/script>
+</body>
+</html>`;
+            const blob = new Blob([fullHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'minipen-export.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        btnConsole.addEventListener('click', () => {
+            consoleVisible = !consoleVisible;
+            if (consoleVisible) {
+                consoleOutput.classList.add('visible');
+                btnConsole.style.background = '#ff9800';
+                renderConsole();
+            } else {
+                consoleOutput.classList.remove('visible');
+                btnConsole.style.background = '#555';
+            }
+        });
+
+        // ============ Layout Switching ============
+        layoutSelect.addEventListener('change', () => {
+            const val = layoutSelect.value;
+            if (val === 'split') {
+                mainContainer.style.flexDirection = 'row';
+                editorPanel.style.display = 'flex';
+                previewPanel.style.display = 'flex';
+                resizeHandle.style.display = 'block';
+                resizeHandle.style.width = '4px';
+                resizeHandle.style.height = 'auto';
+                resizeHandle.style.cursor = 'col-resize';
+            } else if (val === 'rows') {
+                mainContainer.style.flexDirection = 'column';
+                editorPanel.style.display = 'flex';
+                previewPanel.style.display = 'flex';
+                resizeHandle.style.display = 'block';
+                resizeHandle.style.width = 'auto';
+                resizeHandle.style.height = '4px';
+                resizeHandle.style.cursor = 'row-resize';
+            } else if (val === 'preview-only') {
+                editorPanel.style.display = 'none';
+                previewPanel.style.display = 'flex';
+                resizeHandle.style.display = 'none';
+            } else if (val === 'editor-only') {
+                editorPanel.style.display = 'flex';
+                previewPanel.style.display = 'none';
+                resizeHandle.style.display = 'none';
+            }
+        });
+
+        // ============ Resize Handle ============
+        let isResizing = false;
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            resizeHandle.classList.add('active');
+            document.body.style.userSelect = 'none';
+            document.body.style.cursor = layoutSelect.value === 'rows' ? 'row-resize' : 'col-resize';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const rect = mainContainer.getBoundingClientRect();
+            if (layoutSelect.value === 'rows') {
+                const pct = ((e.clientY - rect.top) / rect.height) * 100;
+                if (pct > 15 && pct < 85) {
+                    editorPanel.style.flex = `0 0 ${pct}%`;
+                    previewPanel.style.flex = `1`;
+                }
+            } else {
+                const pct = ((e.clientX - rect.left) / rect.width) * 100;
+                if (pct > 15 && pct < 85) {
+                    editorPanel.style.flex = `0 0 ${pct}%`;
+                    previewPanel.style.flex = `1`;
+                }
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                resizeHandle.classList.remove('active');
+                document.body.style.userSelect = '';
+                document.body.style.cursor = '';
+            }
+        });
+
+        // ============ Keyboard Shortcuts ============
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                updatePreview();
+            }
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                btnExport.click();
+            }
+        });
+
+        // ============ Initial Run ============
+        updatePreview();
+
+        console.log('✅ MiniPen is ready!');
+        console.log('💡 Shortcuts: Ctrl+Enter = Run, Ctrl+S = Download');
+    </script>
+
+</body>
+</html>
