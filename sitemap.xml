@@ -1,9 +1,15 @@
-        <?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="https://minipen-sigma.vercel.app/">
-          <url>
-            <loc>https://[당신의 Vercel 도메인 또는 사용자 지정 도메인]/</loc>
-            <lastmod>2026-07-01T00:00:00+00:00</lastmod> <!-- ISO 8601 형식 -->
-            <changefreq>monthly</changefreq>
-            <priority>1.0</priority>
-          </url>
-        </urlset>
+            <?xml version="1.0" encoding="UTF-8"?>
+            <urlset xmlns="ttps://minipen-sigma.vercel.app/"">
+              <url>
+                <loc>https://[YOUR_VERCEL_DOMAIN]/index.html</loc>
+                <lastmod>2026-07-01T00:00:00+00:00</lastmod>
+                <changefreq>monthly</changefreq>
+                <priority>1.0</priority>
+              </url>
+              <url>
+                <loc>https://[YOUR_VERCEL_DOMAIN]/en.html</loc>
+                <lastmod>2026-07-01T00:00:00+00:00</lastmod>
+                <changefreq>monthly</changefreq>
+                <priority>0.8</priority> <!-- 영어 페이지는 상대적으로 낮은 우선순위로 설정할 수 있음 -->
+              </url>
+            </urlset>
