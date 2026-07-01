@@ -1,7 +1,7 @@
             <?xml version="1.0" encoding="UTF-8"?>
             <urlset xmlns="ttps://minipen-sigma.vercel.app/"">
               <url>
-                <loc>https://[YOUR_VERCEL_DOMAIN]/index.html</loc>
+                <loc>https://https://minipen-sigma.vercel.app//index.html</loc>
                 <lastmod>2026-07-01T00:00:00+00:00</lastmod>
                 <changefreq>monthly</changefreq>
                 <priority>1.0</priority>
